@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Midnight S.R - Roulette</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="main-container">
+        <!-- En-tête -->
+        <header class="header">
+            <h1 class="header__title">Midnight S.R</h1>
+            <p class="header__subtitle">Roulette Aléatoire</p>
+            <div class="header__moderator" id="moderatorBadge" style="display: none;">
+                <span class="header__moderator-icon"></span>
+                Modéré par : <span class="header__moderator-name" id="moderatorDisplayName">—</span>
+            </div>
+        </header>
+
+        <!-- Grille de contenu -->
+        <div class="content-grid">
+            <!-- Panneau gauche -->
+            <div class="panel">
+                <!-- Carte Modérateur -->
+                <div class="card">
+                    <div class="card__title">
+                        <span class="card__title-icon">🛡️</span> Modérateur
+                    </div>
+                    <div class="input-group">
+                        <input type="text" class="input" id="moderatorInput" placeholder="Nom du modérateur..." maxlength="40" autocomplete="off">
+                        <button class="btn btn--primary" id="btnSetModerator">Valider</button>
+                    </div>
+                </div>
+
+                <!-- Carte Participants -->
+                <div class="card">
+                    <div class="card__title">
+                        <span class="card__title-icon">👥</span> Participants
+                        <span class="participant-count" id="participantCount">(0)</span>
+                    </div>
+                    <div class="input-group">
+                        <input type="text" class="input" id="participantInput" placeholder="Ajouter un participant..." maxlength="30" autocomplete="off">
+                        <button class="btn btn--primary" id="btnAddParticipant">Ajouter</button>
+                    </div>
+                    <div class="participants-list-container" id="participantsListContainer">
+                        <ul class="participants-list" id="participantsList">
+                            <li class="empty-state" id="emptyState">Aucun participant pour le moment.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Roulette -->
+            <div class="wheel-section">
+                <div class="wheel-wrapper" id="wheelWrapper">
+                    <div class="wheel-outer-ring"></div>
+                    <!-- Canvas AVANT le pointeur pour que le pointeur soit au-dessus -->
+                    <canvas class="wheel-canvas" id="wheelCanvas" width="440" height="440"></canvas>
+                    <div class="wheel-pointer" id="wheelPointer"></div>
+                </div>
+                <button class="btn btn--gold" id="btnSpin" disabled>
+                    🎯 Lancer la roulette
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modale du gagnant -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal__icon">🏆</div>
+            <div class="modal__title">Félicitations !</div>
+            <div class="modal__winner-name" id="modalWinnerName"></div>
+            <p class="modal__text">La roulette a parlé...</p>
+            <button class="modal__btn" id="btnCloseModal">Fermer</button>
+        </div>
+    </div>
+
+    <!-- Confettis -->
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <!-- Script -->
+    <script src="script.js"></script>
+</body>
+</html>
