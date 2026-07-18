@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDNIGHT S.R — Règlement Officiel</title>
+    <style>
+        :root {
+            --bg-deep: #0B0B0F;
+            --bg-card: #111119;
+            --bg-elevated: #161622;
+            --violet-dark: #2B124C;
+            --blue-night: #101A3A;
+            --violet-light: #A970FF;
+            --violet-mid: #7B4FD4;
+            --white: #F0EDF4;
+            --white-soft: #C8C4D4;
+            --red-accent: #FF3B6B;
+            --gold: #E8C56D;
+            --border-subtle: rgba(169, 112, 255, 0.18);
+            --border-glow: rgba(169, 112, 255, 0.35);
+            --shadow-card: 0 4px 32px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(169, 112, 255, 0.08);
+            --shadow-elevated: 0 12px 48px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(169, 112, 255, 0.15);
+            --radius-sm: clamp(8px, 1.5vw, 12px);
+            --radius-md: clamp(12px, 2vw, 18px);
+            --radius-lg: clamp(16px, 2.5vw, 24px);
+            --font-display: 'Playfair Display', 'Georgia', 'Times New Roman', serif;
+            --font-body: 'Inter', 'Segoe UI', 'Helvetica Neue', sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+            --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            background: var(--bg-deep);
+            color: var(--white-soft);
+            font-family: var(--font-body);
+            line-height: 1.7;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image:
+                radial-gradient(ellipse at 15% 10%, rgba(123, 79, 212, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 70%, rgba(16, 26, 58, 0.25) 0%, transparent 55%),
+                radial-gradient(ellipse at 50% 40%, rgba(169, 112, 255, 0.04) 0%, transparent 70%);
+            padding-bottom: clamp(80px, 10vh, 110px);
+            /* espace pour la barre du bas */
+        }
+
+        /* ---- ANIMATED STARFIELD ---- */
+        .starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.55;
+        }
+
+        .star {
+            position: absolute;
+            border-radius: 50%;
+            background: #fff;
+            animation: twinkle var(--dur) ease-in-out infinite;
+            animation-delay: var(--delay);
+            opacity: 0;
+        }
+
+        @keyframes twinkle {
+            0%,
+            100% {
+                opacity: 0.15;
+                transform: scale(1);
+            }
+            40% {
+                opacity: 0.9;
+                transform: scale(1.8);
+            }
+            70% {
+                opacity: 0.35;
+                transform: scale(0.7);
+            }
+        }
+
+        /* ---- MAIN LAYOUT : centré et fluide ---- */
+        .main-content {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: clamp(1.5rem, 5vw, 2.5rem) clamp(1rem, 4vw, 2rem) 2rem;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* ---- BOOK STYLE SECTIONS ---- */
+        .book-section {
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            padding: clamp(1.8rem, 4vw, 2.8rem);
+            margin-bottom: clamp(1.5rem, 3vw, 2rem);
+            box-shadow: var(--shadow-card);
+            border: 1px solid var(--border-subtle);
+            position: relative;
+            overflow: hidden;
+            transition: all var(--transition-smooth);
+            scroll-margin-top: 1.5rem;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .book-section:hover {
+            border-color: var(--border-glow);
+            box-shadow: var(--shadow-elevated);
+            transform: translateY(-2px);
+        }
+
+        .book-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(180deg, var(--violet-light), var(--red-accent), transparent);
+            border-radius: 4px 0 0 4px;
+            opacity: 0;
+            transition: opacity var(--transition-smooth);
+        }
+
+        .book-section:hover::before {
+            opacity: 1;
+        }
+
+        .book-section.cover-section {
+            background: linear-gradient(160deg, #111119 0%, #1a1130 40%, #0f1628 100%);
+            border: 2px solid var(--border-glow);
+            box-shadow: 0 0 60px rgba(169, 112, 255, 0.15), var(--shadow-card);
+            text-align: center;
+            padding: clamp(3rem, 8vw, 4rem) clamp(1.5rem, 4vw, 2rem);
+        }
+
+        .book-section.cover-section::before {
+            display: none;
+        }
+
+        .section-number {
+            font-family: var(--font-mono);
+            font-size: clamp(0.65rem, 1.2vw, 0.75rem);
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: var(--violet-light);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .section-title {
+            font-family: var(--font-display);
+            font-size: clamp(1.4rem, 4vw, 1.8rem);
+            color: #fff;
+            margin-bottom: 1.2rem;
+            letter-spacing: 0.02em;
+            line-height: 1.3;
+        }
+
+        .section-title .highlight {
+            color: var(--violet-light);
+            position: relative;
+        }
+
+        .section-body {
+            color: var(--white-soft);
+            font-size: clamp(0.85rem, 2vw, 0.95rem);
+            line-height: 1.8;
+        }
+
+        .section-body p {
+            margin-bottom: 1rem;
+        }
+
+        .section-body strong {
+            color: #fff;
+            font-weight: 600;
+        }
+
+        .section-body ul,
+        .section-body ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .section-body li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .section-body ul li::marker {
+            color: var(--violet-light);
+        }
+
+        .section-body ol li::marker {
+            color: var(--violet-light);
+            font-weight: 700;
+        }
+
+        /* ---- COVER SPECIFICS ---- */
+        .cover-title-main {
+            font-family: var(--font-display);
+            font-size: clamp(2.2rem, 8vw, 4.5rem);
+            color: #fff;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.3rem;
+            text-shadow: 0 0 60px rgba(169, 112, 255, 0.5);
+            word-break: break-word;
+        }
+
+        .cover-subtitle {
+            font-family: var(--font-body);
+            font-size: clamp(0.8rem, 2.2vw, 1rem);
+            text-transform: uppercase;
+            letter-spacing: 0.25em;
+            color: var(--violet-light);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .cover-roulette {
+            width: clamp(80px, 20vw, 120px);
+            height: clamp(80px, 20vw, 120px);
+            margin: 0 auto clamp(1.5rem, 3vw, 2rem);
+            border-radius: 50%;
+            background: conic-gradient(var(--violet-light) 0deg 60deg,
+                    #1a1130 60deg 90deg,
+                    var(--red-accent) 90deg 150deg,
+                    #1a1130 150deg 180deg,
+                    var(--gold) 180deg 240deg,
+                    #1a1130 240deg 270deg,
+                    var(--violet-mid) 270deg 330deg,
+                    #1a1130 330deg 360deg);
+            box-shadow: 0 0 50px rgba(169, 112, 255, 0.5), 0 0 100px rgba(255, 59, 107, 0.25);
+            animation: rouletteSpin 10s linear infinite;
+            position: relative;
+        }
+
+        .cover-roulette::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20%;
+            height: 20%;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.9);
+        }
+
+        .cover-roulette-pointer {
+            position: absolute;
+            top: -12%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 18px solid #fff;
+            z-index: 5;
+            filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.8));
+        }
+
+        .cover-roulette-container {
+            position: relative;
+            display: inline-block;
+            margin: 0 auto;
+        }
+
+        @keyframes rouletteSpin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ---- BADGE ---- */
+        .badge {
+            display: inline-block;
+            padding: 0.35rem 0.9rem;
+            border-radius: 20px;
+            font-size: clamp(0.65rem, 1.5vw, 0.75rem);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin: 0.2rem;
+        }
+
+        .badge-violet {
+            background: rgba(169, 112, 255, 0.18);
+            color: var(--violet-light);
+            border: 1px solid rgba(169, 112, 255, 0.3);
+        }
+
+        .badge-red {
+            background: rgba(255, 59, 107, 0.15);
+            color: var(--red-accent);
+            border: 1px solid rgba(255, 59, 107, 0.3);
+        }
+
+        .badge-gold {
+            background: rgba(232, 197, 109, 0.12);
+            color: var(--gold);
+            border: 1px solid rgba(232, 197, 109, 0.3);
+        }
+
+        /* ---- QUOTE BLOCK ---- */
+        .quote-block {
+            background: var(--bg-elevated);
+            border-left: 4px solid var(--violet-light);
+            padding: clamp(0.8rem, 2vw, 1.2rem) clamp(1rem, 2.5vw, 1.5rem);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: #d5cee8;
+            font-size: clamp(0.8rem, 2vw, 0.9rem);
+            letter-spacing: 0.02em;
+        }
+
+        .quote-block strong {
+            font-style: normal;
+            color: var(--violet-light);
+        }
+
+        /* ---- STEP LIST ---- */
+        .step-list {
+            list-style: none;
+            padding: 0;
+            counter-reset: step;
+        }
+
+        .step-list li {
+            counter-increment: step;
+            padding: 0.8rem 1rem 0.8rem 3.2rem;
+            position: relative;
+            margin-bottom: 0.6rem;
+            background: var(--bg-elevated);
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+            font-size: clamp(0.8rem, 2vw, 0.95rem);
+            transition: all var(--transition-smooth);
+            border: 1px solid transparent;
+        }
+
+        .step-list li:hover {
+            border-color: var(--border-subtle);
+            background: #1a1a2a;
+        }
+
+        .step-list li::before {
+            content: counter(step);
+            position: absolute;
+            left: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: clamp(28px, 5vw, 34px);
+            height: clamp(28px, 5vw, 34px);
+            border-radius: 50%;
+            background: var(--violet-dark);
+            color: var(--violet-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: clamp(0.7rem, 1.5vw, 0.85rem);
+            font-family: var(--font-mono);
+            border: 2px solid rgba(169, 112, 255, 0.3);
+        }
+
+        /* ---- OPTION CARDS ---- */
+        .option-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+
+        .option-card {
+            background: var(--bg-elevated);
+            border-radius: var(--radius-md);
+            padding: clamp(1rem, 2.5vw, 1.5rem);
+            border: 1px solid var(--border-subtle);
+            text-align: center;
+            transition: all var(--transition-smooth);
+            cursor: default;
+        }
+
+        .option-card:hover {
+            border-color: var(--border-glow);
+            box-shadow: var(--shadow-elevated);
+            transform: translateY(-3px);
+        }
+
+        .option-card .opt-icon {
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            margin-bottom: 0.6rem;
+            display: block;
+        }
+
+        .option-card h4 {
+            font-family: var(--font-display);
+            color: #fff;
+            font-size: clamp(1rem, 2.5vw, 1.2rem);
+            margin-bottom: 0.4rem;
+        }
+
+        .option-card p {
+            font-size: clamp(0.7rem, 1.8vw, 0.8rem);
+            color: var(--white-soft);
+            line-height: 1.5;
+        }
+
+        .option-card.card-question {
+            border-top: 3px solid var(--violet-light);
+        }
+
+        .option-card.card-gage {
+            border-top: 3px solid var(--red-accent);
+        }
+
+        /* ---- BOTTOM NAVIGATION ---- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--bg-elevated);
+            border-top: 1px solid var(--border-subtle);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.6);
+            z-index: 100;
+            padding: clamp(0.3rem, 1.5vw, 0.7rem) clamp(0.3rem, 2vw, 0.8rem);
+            display: flex;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            transition: all var(--transition-smooth);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .bottom-nav ul {
+            list-style: none;
+            display: flex;
+            gap: clamp(0.2rem, 1vw, 0.5rem);
+            margin: 0;
+            padding: 0;
+            align-items: flex-end;
+            flex-wrap: nowrap;
+            justify-content: center;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        .bottom-nav li {
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .bottom-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: var(--white-soft);
+            padding: 0.25rem 0.3rem;
+            border-radius: var(--radius-sm);
+            transition: all var(--transition-smooth);
+            min-width: clamp(32px, 8vw, 48px);
+        }
+
+        .bottom-nav a:hover {
+            color: #fff;
+            background: rgba(169, 112, 255, 0.15);
+        }
+
+        .bottom-nav a.active {
+            color: #fff;
+            background: rgba(169, 112, 255, 0.2);
+        }
+
+        .nav-num {
+            width: clamp(28px, 7vw, 36px);
+            height: clamp(28px, 7vw, 36px);
+            border-radius: 50%;
+            background: var(--violet-dark);
+            color: var(--violet-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: clamp(0.6rem, 2vw, 0.75rem);
+            font-family: var(--font-mono);
+            transition: all var(--transition-smooth);
+            border: 2px solid transparent;
+        }
+
+        .bottom-nav a.active .nav-num {
+            background: var(--violet-light);
+            color: #fff;
+            box-shadow: 0 0 15px rgba(169, 112, 255, 0.7);
+            border-color: var(--violet-light);
+        }
+
+        .nav-title {
+            font-size: clamp(0.5rem, 1.5vw, 0.65rem);
+            font-weight: 500;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            color: var(--white-soft);
+            margin-top: 2px;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .bottom-nav a.active .nav-title {
+            opacity: 1;
+            max-height: 30px;
+        }
+
+        /* Pour les très petits écrans, on peut masquer les titres même actifs pour gagner de la place */
+        @media (max-width: 400px) {
+            .nav-title {
+                display: none;
+            }
+            .bottom-nav a.active .nav-title {
+                display: block;
+                font-size: 0.5rem;
+            }
+            .bottom-nav a {
+                min-width: 28px;
+                padding: 0.1rem 0.1rem;
+            }
+        }
+
+        /* ---- FOOTER ---- */
+        .book-footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: #6b6380;
+            font-size: clamp(0.65rem, 1.5vw, 0.8rem);
+            letter-spacing: 0.05em;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        /* ---- UTILITIES ---- */
+        @media (max-width: 600px) {
+            .book-section {
+                padding: 1.3rem 1rem;
+                border-radius: var(--radius-md);
+            }
+            .step-list li {
+                padding-left: 2.8rem;
+            }
+            .step-list li::before {
+                left: 0.3rem;
+            }
+            .option-cards {
+                grid-template-columns: 1fr;
+            }
+            .bottom-nav ul {
+                justify-content: flex-start;
+                /* permet le défilement horizontal */
+            }
+        }
+
+        /* Très grands écrans : on garde une largeur confortable */
+        @media (min-width: 1400px) {
+            .main-content {
+                max-width: 1100px;
+            }
+            .book-section {
+                max-width: 1000px;
+            }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;0,800;1,500;1,600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Starfield Background -->
+    <div class="starfield" id="starfield" aria-hidden="true"></div>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+
+        <!-- COVER -->
+        <section class="book-section cover-section" id="section-cover">
+            <div class="cover-roulette-container">
+                <div class="cover-roulette-pointer"></div>
+                <div class="cover-roulette"></div>
+            </div>
+            <h1 class="cover-title-main">MIDNIGHT S.R</h1>
+            <p class="cover-subtitle">Roulette · Questions · Gages · Vocal</p>
+            <p style="color:var(--white-soft);max-width:500px;margin:0 auto 1.5rem;font-size:clamp(0.8rem, 2vw, 0.95rem);">
+                Un jeu de groupe interactif où le <strong style="color:#fff;">hasard</strong> désigne les joueurs,
+                les <strong style="color:#fff;">questions</strong> piquent la curiosité et les
+                <strong style="color:#fff;">gages</strong> pimentent l'ambiance.
+            </p>
+            <span class="badge badge-violet">Jeu vocal</span>
+            <span class="badge badge-red">18+ recommandé</span>
+            <span class="badge badge-gold">Hasard &amp; Fun</span>
+        </section>
+
+        <!-- SECTION 1 -->
+        <section class="book-section" id="section-1">
+            <div class="section-number">Article 1</div>
+            <h2 class="section-title">Inscription des <span class="highlight">participants</span></h2>
+            <div class="section-body">
+                <p>Avant le début du jeu, le <strong>modérateur</strong> doit créer un <strong>sondage</strong> dans le groupe afin de savoir qui souhaite participer.</p>
+                <p>Les personnes intéressées doivent répondre <strong>présentes</strong> au sondage.</p>
+                <p>Seules les personnes ayant <strong>confirmé leur présence</strong> pourront participer officiellement à la partie.</p>
+                <div class="quote-block">
+                    <strong>À retenir :</strong> Le sondage est obligatoire. Il permet de connaître le nombre exact de joueurs à inscrire dans la roulette.
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2 -->
+        <section class="book-section" id="section-2">
+            <div class="section-number">Article 2</div>
+            <h2 class="section-title">Début de la <span class="highlight">partie</span></h2>
+            <div class="section-body">
+                <p>À l'heure prévue, le modérateur <strong>lance un appel vocal</strong> dans le groupe.</p>
+                <p>Tous les participants ayant répondu présents au sondage doivent <strong>rejoindre l'appel</strong>.</p>
+                <p>Le modérateur active ensuite le <strong>partage d'écran</strong> afin de montrer le système de roulette utilisé pour le jeu.</p>
+                <p>Il doit également :</p>
+                <ul>
+                    <li>vérifier la présence des joueurs ;</li>
+                    <li>expliquer rapidement les règles ;</li>
+                    <li>s'assurer que tout le monde voit bien la roulette.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- SECTION 3 -->
+        <section class="book-section" id="section-3">
+            <div class="section-number">Article 3</div>
+            <h2 class="section-title">Mise en place de la <span class="highlight">roulette</span></h2>
+            <div class="section-body">
+                <p>Le modérateur <strong>inscrit dans la roulette</strong> les noms de tous les participants présents.</p>
+                <p>Une fois les noms ajoutés, la roulette peut être <strong>lancée</strong>.</p>
+                <p>La roulette sert à désigner <strong>au hasard</strong> une personne qui jouera le tour.</p>
+                <p>Le modérateur doit s'assurer que la roulette est <strong>visible pour tous</strong> grâce au partage d'écran.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 4 -->
+        <section class="book-section" id="section-4">
+            <div class="section-number">Article 4</div>
+            <h2 class="section-title">Déroulement d'un <span class="highlight">tour</span></h2>
+            <div class="section-body">
+                <ol>
+                    <li>Le modérateur <strong>lance la roulette</strong>.</li>
+                    <li>La roulette désigne un <strong>participant</strong>.</li>
+                    <li>La personne choisie par la roulette doit <strong>choisir un autre participant</strong>.</li>
+                    <li>Le participant choisi <strong>décide</strong> entre poser une question ou donner un gage.</li>
+                    <li>La personne désignée par la roulette doit <strong>répondre</strong> à la question ou <strong>réaliser</strong> le gage.</li>
+                </ol>
+                <p>Ensuite, le modérateur relance la roulette pour passer au <strong>tour suivant</strong>.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 5 -->
+        <section class="book-section" id="section-5">
+            <div class="section-number">Article 5</div>
+            <h2 class="section-title">Règle de <span class="highlight">non-répétition</span></h2>
+            <div class="section-body">
+                <p>Si une personne désignée par la roulette choisit un participant <strong>X</strong>, elle <strong>ne pourra pas</strong> choisir à nouveau ce même participant <strong>X</strong> lors de son prochain passage à la roulette.</p>
+                <div class="quote-block">
+                    <strong>Exemple :</strong> Tour 1 → Alex est choisi par la roulette et désigne Sarah. Tour suivant où Alex retombe → Alex <strong>ne peut pas</strong> choisir Sarah à nouveau. Il devra choisir une autre personne.
+                </div>
+                <p>Cette règle permet d'éviter qu'un même joueur soit <strong>ciblé plusieurs fois</strong> par la même personne.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 6 -->
+        <section class="book-section" id="section-6">
+            <div class="section-number">Article 6</div>
+            <h2 class="section-title"><span class="highlight">Questions</span> &amp; <span class="highlight">Gages</span></h2>
+            <div class="section-body">
+                <p>Les questions et les gages peuvent être <strong>libres</strong>, mais ils doivent rester dans un cadre <strong>respectueux</strong> et accepté par le groupe.</p>
+                <div class="option-cards">
+                    <div class="option-card card-question">
+                        <span class="opt-icon">❓</span>
+                        <h4>Option Question</h4>
+                        <p>La personne pose une question au joueur que la roulette a choisie. Réponse attendue, sauf refus validé.</p>
+                    </div>
+                    <div class="option-card card-gage">
+                        <span class="opt-icon">🎯</span>
+                        <h4>Option Gage</h4>
+                        <p>La personne impose un gage au joueur que la roulette a choisie. Réalisation attendue, sauf refus validé.</p>
+                    </div>
+                </div>
+                <p><strong>Interdictions :</strong> gages dangereux, illégaux, humiliants de façon excessive ou non consentis.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 7 -->
+        <section class="book-section" id="section-7">
+            <div class="section-number">Article 7</div>
+            <h2 class="section-title">Droit de <span class="highlight">refus</span></h2>
+            <div class="section-body">
+                <p>Un participant peut <strong>refuser</strong> une question ou un gage s'il a une <strong>raison valable</strong>.</p>
+                <p>Le refus doit être <strong>présenté au modérateur</strong>, qui décidera si la raison est acceptée.</p>
+                <p>Un refus peut être accepté si :</p>
+                <ul>
+                    <li>le gage ou la question met la personne <strong>mal à l'aise</strong> ;</li>
+                    <li>la demande est <strong>trop personnelle</strong> ;</li>
+                    <li>la demande est <strong>dangereuse</strong> ;</li>
+                    <li>la demande dépasse les <strong>limites</strong> fixées par le groupe.</li>
+                </ul>
+                <p>Si le refus est accepté, le modérateur peut demander à <strong>remplacer</strong> la question ou le gage.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 8 -->
+        <section class="book-section" id="section-8">
+            <div class="section-number">Article 8</div>
+            <h2 class="section-title">Participation par <span class="highlight">chat</span></h2>
+            <div class="section-body">
+                <p>Le jeu se déroule principalement en <strong>vocal</strong>.</p>
+                <p>Cependant, les personnes ayant des <strong>problèmes de connexion</strong> peuvent participer via le <strong>chat textuel</strong> du groupe.</p>
+                <p>Elles pourront :</p>
+                <ul>
+                    <li>répondre aux questions par <strong>écrit</strong> ;</li>
+                    <li>recevoir ou donner des gages par <strong>message</strong> ;</li>
+                    <li>suivre le déroulement dans le chat ;</li>
+                    <li>informer le modérateur en cas de difficulté.</li>
+                </ul>
+                <p>Le <strong>vocal reste la méthode principale</strong> du jeu.</p>
+            </div>
+        </section>
+
+        <!-- SECTION 9 -->
+        <section class="book-section" id="section-9">
+            <div class="section-number">Article 9</div>
+            <h2 class="section-title">Rôle du <span class="highlight">modérateur</span></h2>
+            <div class="section-body">
+                <p>Le modérateur est <strong>responsable</strong> du bon déroulement de la partie. Il doit :</p>
+                <ul>
+                    <li>créer le sondage de participation ;</li>
+                    <li>lancer l'appel vocal ;</li>
+                    <li>vérifier les présences ;</li>
+                    <li>inscrire les noms dans la roulette ;</li>
+                    <li>partager son écran ;</li>
+                    <li>lancer la roulette à chaque tour ;</li>
+                    <li>faire respecter les règles ;</li>
+                    <li>valider ou refuser les contestations ;</li>
+                    <li>maintenir une <strong>bonne ambiance</strong>.</li>
+                </ul>
+                <div class="quote-block">
+                    <strong>Important :</strong> La décision du modérateur est <strong>finale</strong>. Il est l'arbitre principal du jeu.
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 10 -->
+        <section class="book-section" id="section-10">
+            <div class="section-number">Article 10</div>
+            <h2 class="section-title"><span class="highlight">Objectif</span> du jeu</h2>
+            <div class="section-body">
+                <p>Le but de <strong>MIDNIGHT S.R</strong> est de <strong>passer un bon moment</strong> entre participants, dans une ambiance <strong>amusante, spontanée et respectueuse</strong>.</p>
+                <p>Le jeu doit rester un <strong>divertissement</strong>. Chaque joueur doit <strong>respecter les limites</strong> des autres.</p>
+                <div class="quote-block">
+                    <strong>Esprit du jeu :</strong> Hasard, rires, interactions et respect mutuel. Aucune pression, aucune obligation au-delà du consentement de chacun.
+                </div>
+            </div>
+        </section>
+
+        <!-- RESUME -->
+        <section class="book-section" id="section-resume">
+            <div class="section-number">Résumé Express</div>
+            <h2 class="section-title">MIDNIGHT S.R en <span class="highlight">6 étapes</span></h2>
+            <div class="section-body">
+                <ol class="step-list">
+                    <li>Le modérateur crée un <strong>sondage</strong>.</li>
+                    <li>Les participants <strong>confirment</strong> leur présence.</li>
+                    <li>Le modérateur lance l'<strong>appel vocal</strong>.</li>
+                    <li>Les noms sont ajoutés dans la <strong>roulette</strong>.</li>
+                    <li>La roulette choisit un <strong>joueur</strong>.</li>
+                    <li>Le joueur choisi désigne quelqu'un, qui choisit entre <strong>question</strong> ou <strong>gage</strong>.</li>
+                </ol>
+                <p style="text-align:center;margin-top:1rem;">Le jeu continue jusqu'à ce que le modérateur décide de l'arrêter.</p>
+            </div>
+        </section>
+
+        <footer class="book-footer">
+            <p>MIDNIGHT S.R — Règlement Officiel — Édition 2026</p>
+            <p style="margin-top:0.3rem;">Jeu de roulette, questions et gages en vocal · <span style="color:var(--violet-light);">18+ recommandé</span></p>
+        </footer>
+    </main>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-nav" id="bottomNav">
+        <ul>
+            <li><a href="#section-cover" data-section="cover" class="active"><span class="nav-num">⌂</span><span class="nav-title">Accueil</span></a></li>
+            <li><a href="#section-1" data-section="1"><span class="nav-num">1</span><span class="nav-title">Inscription</span></a></li>
+            <li><a href="#section-2" data-section="2"><span class="nav-num">2</span><span class="nav-title">Début</span></a></li>
+            <li><a href="#section-3" data-section="3"><span class="nav-num">3</span><span class="nav-title">Roulette</span></a></li>
+            <li><a href="#section-4" data-section="4"><span class="nav-num">4</span><span class="nav-title">Tour</span></a></li>
+            <li><a href="#section-5" data-section="5"><span class="nav-num">5</span><span class="nav-title">Répétition</span></a></li>
+            <li><a href="#section-6" data-section="6"><span class="nav-num">6</span><span class="nav-title">Q & G</span></a></li>
+            <li><a href="#section-7" data-section="7"><span class="nav-num">7</span><span class="nav-title">Refus</span></a></li>
+            <li><a href="#section-8" data-section="8"><span class="nav-num">8</span><span class="nav-title">Chat</span></a></li>
+            <li><a href="#section-9" data-section="9"><span class="nav-num">9</span><span class="nav-title">Modo</span></a></li>
+            <li><a href="#section-10" data-section="10"><span class="nav-num">10</span><span class="nav-title">Objectif</span></a></li>
+            <li><a href="#section-resume" data-section="resume"><span class="nav-num">⚡</span><span class="nav-title">Résumé</span></a></li>
+        </ul>
+    </nav>
+
+    <script>
+        // ---- STARFIELD GENERATION ----
+        (function generateStars() {
+            const container = document.getElementById('starfield');
+            const count = 90;
+            let html = '';
+            for (let i = 0; i < count; i++) {
+                const size = Math.random() * 2.5 + 0.6;
+                const x = Math.random() * 100;
+                const y = Math.random() * 100;
+                const dur = Math.random() * 4 + 3;
+                const delay = Math.random() * 5;
+                html +=
+                    `<span class="star" style="width:${size}px;height:${size}px;left:${x}%;top:${y}%;--dur:${dur}s;--delay:${delay}s;"></span>`;
+            }
+            container.innerHTML = html;
+        })();
+
+        // ---- ACTIVE SECTION HIGHLIGHT ON SCROLL ----
+        const sections = document.querySelectorAll('.book-section');
+        const navLinks = document.querySelectorAll('.bottom-nav a');
+
+        function updateActiveNav() {
+            let currentId = 'section-cover';
+            let minDist = Infinity;
+
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                const dist = Math.abs(rect.top - 150);
+                if (dist < minDist) {
+                    minDist = dist;
+                    currentId = section.id;
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                const sectionRef = link.getAttribute('data-section');
+                if (
+                    (currentId === 'section-cover' && sectionRef === 'cover') ||
+                    (currentId === 'section-resume' && sectionRef === 'resume') ||
+                    currentId === 'section-' + sectionRef
+                ) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', updateActiveNav, { passive: true });
+        window.addEventListener('load', updateActiveNav);
+
+        // Smooth scroll & active class on click
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                setTimeout(updateActiveNav, 100);
+            });
+        });
+    </script>
+</body>
+</html>
